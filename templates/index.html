@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Authentication</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+        }
+        h1 {
+            color: #333;
+        }
+        .welcome-text {
+            color: #555;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        input {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .question-mark {
+            cursor: pointer;
+            font-size: 20px;
+            color: #007bff;
+            margin-top: 10px;
+            display: block;
+        }
+        .note {
+            display: none;
+            margin-top: 20px;
+            color: #555;
+            font-size: 16px;
+        }
+        .cookie-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+        .cookie-accept,
+        .cookie-decline {
+            padding: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        .cookie-accept {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .cookie-decline {
+            background-color: #f44336;
+            color: white;
+        }
+        .footer {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+        }
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function showNote() {
+            var note = document.getElementById('note');
+            note.style.display = 'block';
+        }
+
+        function acceptCookies() {
+            var cookieBox = document.getElementById('cookieBox');
+            cookieBox.style.display = 'none';
+            // Establecer cookie de aceptación
+            document.cookie = 'cookieAccepted=true';
+        }
+
+        function declineCookies() {
+            alert('No puedes acceder hasta que aceptes el uso de cookies.');
+        }
+
+        function checkCookies() {
+            var cookieAccepted = document.cookie.includes('cookieAccepted=true');
+            if (!cookieAccepted) {
+                alert('No puedes acceder hasta que aceptes el uso de cookies.');
+                return false;
+            }
+            return true;
+        }
+
+        // Funciones del Modal
+        function openModal() {
+            var modal = document.getElementById('myModal');
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            var modal = document.getElementById('myModal');
+            modal.style.display = 'none';
+        }
+
+        // Cierra el modal si el usuario hace clic fuera de él
+        window.onclick = function(event) {
+            var modal = document.getElementById('myModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Autenticar Clave</h1>
+    <div class="welcome-text">
+        Bienvenido a la web D4NN, donde tendrás acceso a multiaplicaciones creadas por el creador "DANI". Más información pronto...
+    </div>
+    <form action="/authenticate" method="post" onsubmit="return checkCookies()">
+        <label for="entered_key">Clave:</label>
+        <input type="password" id="entered_key" name="entered_key" required>
+        <button type="submit" onclick="rememberUser()">Autenticar</button>
+    </form>
+    <div class="question-mark" onclick="showNote()">¿Qué clave?</div>
+    <div class="note" id="note">
+        Si no sabes qué clave es, pídesela al creador para acceso: "DANI"
+    </div>
+    <div class="cookie-box" id="cookieBox">
+        Este sitio utiliza cookies para almacenar información de inicio de sesión. Al hacer clic en "Aceptar", aceptas el uso de cookies.
+        <button class="cookie-accept" onclick="acceptCookies()">Aceptar</button>
+        <button class="cookie-decline" onclick="declineCookies()">Rechazar</button>
+    </div>
+    <div class="footer">
+        <div>.. Licencias de web como desarrollador © </div>
+        <a href="#" onclick="openModal()">¿Quién es D4NN?</a>
+    </div>
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Quién es D4NN</h2>
+            <p>
+                D4NN, también conocido como "DANI", es un joven estudiante de ciberseguridad que ha experimentado una transformación en sus dos años de aprendizaje.
+                Inicialmente dedicado al hacking ético, cambió su enfoque hacia la programación a la edad de 15 años.
+                Actualmente tiene un gran conocimiento en varios lenguajes backend de programación, incluyendo:
+            </p>
+            <ul>
+                <li>Python</li>
+                <li>Javascript</li>
+                <li>PHP</li>
+                <li>SQL</li>
+                <li>.NET</li>
+            </ul>
+            <p>
+                Además de su dedicación a la programación, también ha explorado el campo de la ciberseguridad y ha participado en diversas actividades relacionadas con la seguridad informática.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
